@@ -5,6 +5,7 @@ import { FiMail, FiGithub, FiLinkedin } from "react-icons/fi"
 import GlassCard from "@/components/ui/GlassCard"
 import CosmicButton from "@/components/ui/CosmicButton"
 import GalaxyButton from "@/components/ui/GalaxyButton"
+import { useEffect, useState } from "react"
 
 const contactContent = {
   heading: "Let’s Work Together",
@@ -12,7 +13,7 @@ const contactContent = {
     "Have a project idea or just want to connect? Drop a message below.",
   email: "dhavaljoshi0316@gmail.com",
   responseNote:
-    "I usually respond within 24 hours. Let’s build something impactful.",
+    "Let’s build something impactful.",
   button: {
     label: "Send Message",
     variant: "primary"
@@ -44,6 +45,87 @@ const visitorContent = {
 
 
 export default function ContactPage() {
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: ""
+  })
+
+  const [errors, setErrors] = useState({})
+  const [loading, setLoading] = useState(false);
+
+  const validate = () => {
+    const newErrors = {}
+
+    // Name validation
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required"
+    } else if (!/^[a-zA-Z\s]{2,50}$/.test(formData.name)) {
+      newErrors.name = "Enter valid name (letters only)"
+    }
+
+    // Email validation
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required"
+    } else if (
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+    ) {
+      newErrors.email = "Enter valid email address"
+    }
+
+    // Message validation
+    if (!formData.message.trim()) {
+      newErrors.message = "Message is required"
+    } else if (formData.message.length < 10) {
+      newErrors.message = "Message must be at least 10 characters"
+    }
+
+    setErrors(newErrors)
+
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    if (!validate()) return
+
+    try {
+      setLoading(true)
+
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await res.json()
+
+      if (data.success) {
+        alert("Message sent successfully")
+        setFormData({ name: "", email: "", message: "" })
+      } else {
+        alert("Failed to send message")
+      }
+
+    } catch (error) {
+      console.error(error)
+      alert("Something went wrong")
+    } finally {
+      setLoading(false)
+    }
+  }
   return (
     <section className="min-h-svh pt-24 lg:pt-28 pb-16">
       <div className="container-custom px-4 sm:px-6 lg:px-8">
@@ -93,49 +175,58 @@ export default function ContactPage() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
 
                 {/* FORM */}
-                <form className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6" autoComplete="off">
                   {formFields.map((field, index) => {
                     if (field.type === "textarea") {
                       return (
-                        <textarea
-                          key={index}
-                          name={field.name}
-                          rows={field.rows}
-                          placeholder={field.placeholder}
-                          className="
-                    w-full rounded-xl px-4 py-3
-                    bg-background/60
-                    border border-border
-                    focus:outline-none
-                    focus:ring-2 focus:ring-primary
-                    transition
-                  "
-                        />
+                        <div className="flex flex-col">
+                          <textarea
+                            key={index}
+                            name={field.name}
+                            rows={field.rows}
+                            value={formData[field.name]}
+                            onChange={handleChange}
+                            placeholder={field.placeholder}
+                            className="w-full rounded-xl px-4 py-3 bg-background/60 border border-border focus:outline-none focus:ring-2 focus:ring-primary transition"
+                          />
+
+
+                          {errors[field.name] && (
+                            <p className="text-xs text-red-500 mt-1 animate-fadeIn ml-2">
+                              {errors[field.name]}
+                            </p>
+                          )}
+                        </div>
+
                       )
                     }
 
                     return (
-                      <input
-                        key={index}
-                        type={field.type}
-                        name={field.name}
-                        placeholder={field.placeholder}
-                        className="
-                  w-full rounded-xl px-4 py-3
-                  bg-background/60
-                  border border-border
-                  focus:outline-none
-                  focus:ring-2 focus:ring-primary
-                  transition
-                "
-                      />
+                      <div className="flex flex-col">
+                        <input
+                          type={field.type}
+                          name={field.name}
+                          value={formData[field.name]}
+                          onChange={handleChange}
+                          placeholder={field.placeholder}
+                          className="w-full rounded-xl px-4 py-3 bg-background/60 border border-border focus:outline-none focus:ring-2 focus:ring-primary transition"
+                        />
+
+                        {errors[field.name] && (
+                          <p className="text-xs text-red-500 mt-1 animate-fadeIn ml-2">
+                            {errors[field.name]}
+                          </p>
+                        )}
+                      </div>
+
                     )
                   })}
 
                   <GalaxyButton
-                    label={contactContent.button.label}
+                    label={loading ? "Sending..." : contactContent.button.label}
                     type="submit"
                     variant={contactContent.button.variant}
+                    disabled={loading}
                   />
                 </form>
 
