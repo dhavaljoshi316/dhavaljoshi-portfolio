@@ -9,8 +9,6 @@ import { useEffect, useState } from "react"
 import GlassAlert from "@/components/ui/CustomAlert"
 import { contactContent, formFields, socialLinks } from "@/lib/data";
 
-
-
 export default function ContactPage() {
   type FormFields = "name" | "email" | "message";
 
@@ -58,7 +56,7 @@ export default function ContactPage() {
   });
 
   const validate = () => {
-    const newErrors = {name: '', email: '', message: ''}
+    const newErrors: FormErrors = {}
 
     // Name validation
     if (!formData.name.trim()) {
