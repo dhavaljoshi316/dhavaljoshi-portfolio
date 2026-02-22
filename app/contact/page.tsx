@@ -98,7 +98,7 @@ export default function ContactPage() {
     if (alert.show) {
       const timer = setTimeout(() => {
         setAlert(prev => ({ ...prev, show: false }))
-      }, 10000)
+      }, 2500)
 
       return () => clearTimeout(timer)
     }
