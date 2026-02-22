@@ -1,26 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { FiGithub, FiLinkedin, FiInstagram, FiMenu, FiX } from "react-icons/fi"
-
-const navbarContent = {
-    brand: "Dhaval Joshi",
-    navLinks: [
-        { label: "About", href: "/about" },
-        { label: "Skills", href: "/skills" },
-        { label: "Projects", href: "/projects" },
-        { label: "Awards", href: "/awards" },
-        { label: "Contact", href: "/contact" }
-    ],
-    socialLinks: [
-        { icon: FiGithub, href: "https://www.github.com/dhavaljoshi316" },
-        { icon: FiLinkedin, href: "https://www.linkedin.com/in/dhaval-joshi-290528252/" },
-        { icon: FiInstagram, href: "https://instagram.com" }
-    ]
-}
+import { FiMenu, FiX } from "react-icons/fi"
+import { navbarContent } from "./../../lib/data";
 
 export default function Navbar() {
     const pathname = usePathname()
@@ -37,6 +22,35 @@ export default function Navbar() {
         backgroundRepeat: "repeat",
         backgroundSize: "400px 400px"
     }
+
+
+    useEffect(() => {
+        if (isOpen) {
+            const scrollY = window.scrollY
+
+            document.body.style.position = "fixed"
+            document.body.style.top = `-${scrollY}px`
+            document.body.style.left = "0"
+            document.body.style.right = "0"
+            document.body.style.width = "100%"
+        } else {
+            const scrollY = document.body.style.top
+            document.body.style.position = ""
+            document.body.style.top = ""
+            document.body.style.left = ""
+            document.body.style.right = ""
+            document.body.style.width = ""
+
+            if (scrollY) {
+                window.scrollTo(0, parseInt(scrollY || "0") * -1)
+            }
+        }
+
+        return () => {
+            document.body.style.position = ""
+            document.body.style.top = ""
+        }
+    }, [isOpen])
 
     return (
         <>
@@ -132,7 +146,7 @@ export default function Navbar() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsOpen(false)}
-                            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[998] md:hidden"
+                            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998] md:hidden"
                         />
 
                         {/* Drawer */}
@@ -144,7 +158,7 @@ export default function Navbar() {
                             className="
   fixed top-0 right-0
   h-full w-[85%] max-w-sm
-  z-[999] md:hidden
+  z-[9999] md:hidden
   backdrop-blur-2xl
 "
                             style={{

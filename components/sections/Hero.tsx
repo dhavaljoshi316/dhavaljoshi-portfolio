@@ -2,27 +2,8 @@
 
 import { motion } from "framer-motion"
 import GalaxyButton from "@/components/ui/GalaxyButton"
-import { useEffect, useState } from "react"
-
-const heroContent = {
-  title: "Fullstack & React Native Developer",
-  description:
-    "I build scalable web and mobile applications using modern technologies with performance and clean architecture in mind.",
-  primaryButton: {
-    label: "Download CV",
-    href: "/DhavalJoshi.pdf"
-  },
-  secondaryButton: {
-    label: "Contact Me",
-    href: "/contact"
-  }
-}
-
-const heroStats = [
-  { label: "Years Experience", value: 3, suffix: "+" },
-  { label: "Projects Delivered", value: 15, suffix: "+" },
-  { label: "Awards", value: 4, suffix: "+" }
-]
+import { useEffect, useState } from "react";
+import { heroContent, heroStats } from "./../../lib/data";
 
 function AnimatedCounter({ value }: { value: number }) {
   const [count, setCount] = useState(0)

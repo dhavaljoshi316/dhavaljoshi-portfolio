@@ -1,30 +1,9 @@
 "use client"
 
+import { skillsContent } from "@/lib/data";
 import { motion } from "framer-motion";
-import {
-  SiReact,
-  SiNodedotjs,
-  SiMongodb,
-  SiTypescript,
-  SiNextdotjs,
-  SiTailwindcss,
-  SiExpress
-} from "react-icons/si"
 
-const skillsContent = {
-  heading: "Skills",
-  description: "Technologies and tools I work with.",
-  items: [
-    { name: "React Native", level: 90, icon: SiReact },
-    { name: "React.js", level: 85, icon: SiReact },
-    { name: "Node.js", level: 80, icon: SiNodedotjs },
-    { name: "Express.js", level: 80, icon: SiExpress },
-    { name: "MongoDB", level: 75, icon: SiMongodb },
-    { name: "TypeScript", level: 85, icon: SiTypescript },
-    { name: "Next.js", level: 85, icon: SiNextdotjs },
-    { name: "Tailwind CSS", level: 90, icon: SiTailwindcss }
-  ]
-}
+
 
 export default function SkillsPage() {
   return (
@@ -55,56 +34,57 @@ export default function SkillsPage() {
           </motion.p>
         </div>
 
-        <div className="mt-10 max-w-4xl space-y-8">
-          {skillsContent.items.map((skill, index) => (
+        <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 gap-8">
+
+          {skillsContent.categories.map((category, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
               viewport={{ once: true }}
+              className="relative rounded-xl backdrop-blur-xl border p-6 transition-all duration-300 hover:scale-[1.03]"
+              style={{
+                background: "rgba(20, 22, 50, 0.5)",
+                borderColor: "rgba(255,255,255,0.08)",
+                boxShadow: "0 0 30px rgba(0,0,0,0.4)"
+              }}
             >
-              {/* Top Row */}
-              <div className="flex justify-between items-center mb-3">
 
-                <div className="flex items-center gap-3">
+              {/* Card Title */}
+              <h3
+                className="text-lg mb-6 text-primary tracking-wide"
+                style={{ fontFamily: "var(--font-heading)" }}
+              >
+                {category.title}
+              </h3>
 
-                  <skill.icon className="text-lg text-primary opacity-80" />
-
-                  <span
-                    className="text-sm sm:text-base tracking-wider"
-                    style={{ fontFamily: "var(--font-heading)" }}
+              {/* Items */}
+              <div className="flex flex-wrap gap-3">
+                {category.items.map((skill, i) => (
+                  <motion.div
+                    key={i}
+                    whileHover={{ scale: 1.05 }}
+                    className="flex items-center gap-2 px-4 py-2 rounded-full backdrop-blur-md border"
+                    style={{
+                      background: "rgba(75, 92, 255, 0.15)",
+                      border: "1px solid rgba(75, 92, 255, 0.4)",
+                      color: "#cfd3ff"
+                    }}
                   >
-                    {skill.name}
-                  </span>
-
-                </div>
-
-                <span className="text-sm text-primary" style={{ fontFamily: "var(--font-heading)" }}>
-                  {skill.level}%
-                </span>
+                    {skill.icon && (
+                      <skill.icon className="text-primary text-sm" />
+                    )}
+                    <span className="text-sm">
+                      {skill.name}
+                    </span>
+                  </motion.div>
+                ))}
               </div>
 
-              {/* Progress Bar */}
-              <div className="relative h-3 rounded-full bg-background/40 overflow-hidden border border-border">
-
-                <motion.div
-                  initial={{ width: 0 }}
-                  whileInView={{ width: `${skill.level}%` }}
-                  transition={{ duration: 1 }}
-                  viewport={{ once: true }}
-                  className="h-full rounded-full"
-                  style={{
-                    background:
-                      "linear-gradient(90deg, #4b5cff, #00c6ff)",
-                    boxShadow:
-                      "0 0 15px rgba(75,92,255,0.6)"
-                  }}
-                />
-
-              </div>
             </motion.div>
           ))}
+
         </div>
 
       </div>

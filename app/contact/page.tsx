@@ -6,57 +6,59 @@ import GlassCard from "@/components/ui/GlassCard"
 import CosmicButton from "@/components/ui/CosmicButton"
 import GalaxyButton from "@/components/ui/GalaxyButton"
 import { useEffect, useState } from "react"
+import GlassAlert from "@/components/ui/CustomAlert"
+import { contactContent, formFields, socialLinks } from "@/lib/data";
 
-const contactContent = {
-  heading: "Let’s Work Together",
-  description:
-    "Have a project idea or just want to connect? Drop a message below.",
-  email: "dhavaljoshi0316@gmail.com",
-  responseNote:
-    "Let’s build something impactful.",
-  button: {
-    label: "Send Message",
-    variant: "primary"
-  }
-}
-
-
-const formFields = [
-  { type: "text", name: "name", placeholder: "Your Name" },
-  { type: "email", name: "email", placeholder: "Your Email" },
-  {
-    type: "textarea",
-    name: "message",
-    placeholder: "Your Message",
-    rows: 5
-  }
-]
-
-const socialLinks = [
-  { icon: FiGithub, href: "https://www.github.com/dhavaljoshi316" },
-  { icon: FiLinkedin, href: "https://www.linkedin.com/in/dhaval-joshi-290528252/" }
-]
-
-const visitorContent = {
-  label: "Portfolio Visitor",
-  count: 1, // later can be dynamic
-  note: "Thanks for stopping by."
-}
 
 
 export default function ContactPage() {
+  type FormFields = "name" | "email" | "message";
 
-  const [formData, setFormData] = useState({
+  const formFields: {
+    type: string
+    name: FormFields
+    placeholder: string
+    rows?: number
+  }[] = [
+    { type: "text", name: "name", placeholder: "Your Name" },
+    { type: "email", name: "email", placeholder: "Your Email" },
+    {
+      type: "textarea",
+      name: "message",
+      placeholder: "Your Message",
+      rows: 5
+    }
+  ]
+
+  interface FormData {
+    name: string
+    email: string
+    message: string
+  }
+
+  type FormErrors = {
+    name?: string
+    email?: string
+    message?: string
+  }
+  
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     message: ""
   })
 
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState<FormErrors>({})
   const [loading, setLoading] = useState(false);
 
+  const [alert, setAlert] = useState({
+    show: false,
+    message: "",
+    type: "success" as "success" | "error"
+  });
+
   const validate = () => {
-    const newErrors = {}
+    const newErrors = {name: '', email: '', message: ''}
 
     // Name validation
     if (!formData.name.trim()) {
@@ -86,7 +88,7 @@ export default function ContactPage() {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
@@ -94,7 +96,17 @@ export default function ContactPage() {
     }))
   }
 
-  const handleSubmit = async (e) => {
+  useEffect(() => {
+    if (alert.show) {
+      const timer = setTimeout(() => {
+        setAlert(prev => ({ ...prev, show: false }))
+      }, 10000)
+
+      return () => clearTimeout(timer)
+    }
+  }, [alert.show])
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault()
 
     if (!validate()) return
@@ -113,21 +125,40 @@ export default function ContactPage() {
       const data = await res.json()
 
       if (data.success) {
-        alert("Message sent successfully")
+        setAlert({
+          show: true,
+          message: "Message sent successfully.",
+          type: "success"
+        })
+
         setFormData({ name: "", email: "", message: "" })
       } else {
-        alert("Failed to send message")
+        setAlert({
+          show: true,
+          message: "Failed to send message",
+          type: "error"
+        })
       }
 
     } catch (error) {
       console.error(error)
-      alert("Something went wrong")
+      setAlert({
+        show: true,
+        message: "Something went Wrong",
+        type: "error"
+      })
     } finally {
       setLoading(false)
     }
   }
   return (
     <section className="min-h-svh pt-24 lg:pt-28 pb-16">
+      <GlassAlert
+        message={alert.message}
+        type={alert.type}
+        isVisible={alert.show}
+      />
+
       <div className="container-custom px-4 sm:px-6 lg:px-8">
 
         {/* Heading */}
@@ -278,29 +309,6 @@ export default function ContactPage() {
 
           </div>
         </div>
-
-        {/* Visitors Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="mt-10 lg:mt-12 text-center"
-        >
-          <p className="text-sm text-muted-foreground tracking-wide uppercase">
-            {visitorContent.label}
-          </p>
-
-          <h2 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold text-primary">
-            {visitorContent.count.toLocaleString()}
-          </h2>
-
-          <p className="mt-4 text-sm text-muted-foreground">
-            {visitorContent.note}
-          </p>
-        </motion.div>
-
-
       </div>
     </section>
   )

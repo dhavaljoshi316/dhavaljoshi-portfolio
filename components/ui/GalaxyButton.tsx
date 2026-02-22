@@ -6,7 +6,7 @@ interface GalaxyButtonProps {
   label: string
   type?: "button" | "submit"
   href?: string
-  variant?: "primary" | "outline"
+  variant?: string
   isDownload?: boolean
   disabled?: boolean
 }

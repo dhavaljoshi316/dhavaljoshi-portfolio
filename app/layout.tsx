@@ -7,6 +7,7 @@ import Navbar from "@/components/layout/Navbar"
 import Footer from "@/components/layout/Footer";
 import ScrollProgress from "@/components/ui/SmallProgress";
 import FloatingCVButton from "@/components/ui/FloatingCVButton";
+import VisitorCounter from "@/components/ui/VisitorCounter";
 const Background = dynamic(
   () => import("@/components/layout/Background"),
   { ssr: true }
@@ -38,7 +39,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <Background />
-          {/* <ScrollProgress  /> */}
+          <ScrollProgress  />
           <Navbar />
           <div className="w-full">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">

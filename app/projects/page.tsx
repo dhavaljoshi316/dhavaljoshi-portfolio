@@ -1,37 +1,9 @@
 "use client"
 import Image from "next/image"
-import { motion } from "framer-motion"
-
-const projectsContent = {
-    title: "Projects",
-    subtitle: "Selected work showcasing my development experience.",
-    projects: [
-        {
-            name: "Project One",
-            type: "Web App",
-            description:
-                "Fullstack web application built with scalable architecture and optimized performance.",
-            //image: "/assets/projects/project1.jpg",
-            technologies: ["Next.js", "Node.js", "MongoDB", "Tailwind"]
-        },
-        {
-            name: "Project Two",
-            type: "Mobile Application",
-            description:
-                "React Native mobile application with real-time features and smooth UI.",
-            //image: "/assets/projects/project2.jpg",
-            technologies: ["React Native", "Firebase", "Redux"]
-        },
-        {
-            name: "Project Three",
-            type: "Backend API",
-            description:
-                "REST API backend system built using Express and PostgreSQL.",
-            //image: "/assets/projects/project3.jpg",
-            technologies: ["Express", "PostgreSQL", "Docker"]
-        }
-    ]
-}
+import { motion } from "framer-motion";
+import { FiCode, FiGithub } from "react-icons/fi";
+import { SiGoogleplay, SiAppstore } from "react-icons/si";
+import { projectsContent } from "@/lib/data";
 
 export default function ProjectsPage() {
     return (
@@ -70,20 +42,38 @@ export default function ProjectsPage() {
                             }}
                         >
 
-                            {/* Project Image */}
-                            <div className="relative h-56 w-full">
-                                {
-                                    project.image &&
+                            <div className="relative h-56 w-full flex items-center justify-center">
+
+                                <div
+                                    className="absolute inset-0"
+                                    style={{
+                                        background:
+                                            "radial-gradient(circle at center, rgba(75,92,255,0.15), transparent 70%)"
+                                    }}
+                                />
+
+                                {project.image ? (
                                     <Image
                                         src={project.image}
                                         alt={project.name}
                                         fill
                                         className="object-cover"
                                     />
-                                }
+                                ) : (
+                                    <div
+                                        className="flex items-center justify-center w-16 h-16 rounded-full backdrop-blur-md z-10"
+                                        style={{
+                                            background: "rgba(0,0,0,0.5)",
+                                            border: "1px solid rgba(255,255,255,0.15)",
+                                            color: "#ffffff"
+                                        }}
+                                    >
+                                        <FiCode size={24} />
+                                    </div>
+                                )}
 
                                 <div
-                                    className="absolute top-4 left-4 flex items-center gap-2.5 px-3 py-1 text-xs rounded-full backdrop-blur-md"
+                                    className="absolute top-4 left-4 flex items-center gap-2.5 px-3 py-1 text-xs rounded-full backdrop-blur-md z-20"
                                     style={{
                                         background: "rgba(0,0,0,0.5)",
                                         border: "1px solid rgba(255,255,255,0.15)",
@@ -91,8 +81,6 @@ export default function ProjectsPage() {
                                         letterSpacing: "1px"
                                     }}
                                 >
-
-                                    {/* Blinking Dot */}
                                     <span
                                         style={{
                                             width: "8px",
@@ -103,10 +91,20 @@ export default function ProjectsPage() {
                                             animation: "pulse-dot 2s ease-in-out infinite"
                                         }}
                                     />
-
                                     {project.type}
-
                                 </div>
+
+                                {project.category && <div
+                                    className="absolute top-4 right-4 px-3 py-1 text-xs rounded-full backdrop-blur-md z-20"
+                                    style={{
+                                        background: "rgba(75,92,255,0.2)",
+                                        border: "1px solid rgba(75,92,255,0.4)",
+                                        color: "#cfd3ff",
+                                        letterSpacing: "1px"
+                                    }}
+                                >
+                                    {project.category}
+                                </div>}
 
                             </div>
 
@@ -115,6 +113,12 @@ export default function ProjectsPage() {
                                 <h3 className="text-xl mb-3">
                                     {project.name}
                                 </h3>
+
+                                {project.company && (
+                                    <p className="text-sm text-primary mb-2">
+                                        {project.company}
+                                    </p>
+                                )}
 
                                 <p
                                     className="mb-4"
@@ -138,6 +142,57 @@ export default function ProjectsPage() {
                                             {tech}
                                         </span>
                                     ))}
+                                </div>
+
+                                {/* Links Section */}
+                                <div className="mt-6 flex items-center gap-4">
+                                    {project.androidLink && (
+                                        <a
+                                            href={project.androidLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="p-2 rounded-full backdrop-blur-md border transition hover:scale-110"
+                                            style={{
+                                                background: "rgba(75,92,255,0.15)",
+                                                border: "1px solid rgba(75,92,255,0.4)",
+                                                color: "#ffffff"
+                                            }}
+                                        >
+                                            <SiGoogleplay size={16} />
+                                        </a>
+                                    )}
+
+                                    {project.iOSLink && (
+                                        <a
+                                            href={project.iOSLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="p-2 rounded-full backdrop-blur-md border transition hover:scale-110"
+                                            style={{
+                                                background: "rgba(75,92,255,0.15)",
+                                                border: "1px solid rgba(75,92,255,0.4)",
+                                                color: "#ffffff"
+                                            }}
+                                        >
+                                            <SiAppstore size={16} />
+                                        </a>
+                                    )}
+
+                                    {project.github && (
+                                        <a
+                                            href={project.github}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="p-2 rounded-full backdrop-blur-md border transition hover:scale-110"
+                                            style={{
+                                                background: "rgba(75,92,255,0.15)",
+                                                border: "1px solid rgba(75,92,255,0.4)",
+                                                color: "#ffffff"
+                                            }}
+                                        >
+                                            <FiGithub size={16} />
+                                        </a>
+                                    )}
                                 </div>
 
                             </div>
