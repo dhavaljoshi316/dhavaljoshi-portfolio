@@ -94,7 +94,7 @@ export default function ProjectsPage() {
                                     {project.type}
                                 </div>
 
-                                {project.category && <div
+                                {/* {project.category && <div
                                     className="absolute top-4 right-4 px-3 py-1 text-xs rounded-full backdrop-blur-md z-20"
                                     style={{
                                         background: "rgba(75,92,255,0.2)",
@@ -104,7 +104,7 @@ export default function ProjectsPage() {
                                     }}
                                 >
                                     {project.category}
-                                </div>}
+                                </div>} */}
 
                             </div>
 
