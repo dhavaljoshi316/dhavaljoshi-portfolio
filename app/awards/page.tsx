@@ -182,10 +182,17 @@ export default function Awards() {
                   </p>
 
                   <div className="flex justify-between items-center">
-                    <span className="text-xs text-primary">
-                      {cert.year}
-                    </span>
-
+                  <div
+                    className="inline-flex items-center gap-2 px-3 py-1 text-xs rounded-full backdrop-blur-md"
+                    style={{
+                      background: "rgba(75, 92, 255, 0.15)",
+                      border: "1px solid rgba(75, 92, 255, 0.4)",
+                      color: "#cfd3ff"
+                    }}
+                  >
+                    <FiCalendar size={12} />
+                    {cert.year}
+                  </div>
                     {cert.credentialLink && (
                       <a
                         href={cert.credentialLink}
