@@ -75,12 +75,23 @@ export default function Hero() {
           />
         </motion.div>
 
+        {
+          heroContent.isOpenToShow &&
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }} className="inline-flex items-center gap-4 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-400 backdrop-blur-md mt-3 sm:mt-5 max-w-4xl">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            {heroContent.openTo}
+          </motion.div>
+        }
+
         {/* Stats Strip */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="mt-14 sm:mt-16 max-w-4xl"
+          className="mt-10 sm:mt-12 max-w-4xl"
         >
           <div
             className="

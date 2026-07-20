@@ -88,7 +88,7 @@ export default function Background() {
   }}
 >
   <Image
-    src="/assets/space/planet-earth.png"
+    src="/assets/space/planet-react.png"
     alt="Planet Earth"
     fill
     className="
@@ -124,7 +124,7 @@ export default function Background() {
   }}
 >
   <Image
-    src="/assets/space/planet-purple.png"
+    src="/assets/space/planet-next.png"
     alt="Small Planet"
     fill
     className="
